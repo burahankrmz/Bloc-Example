@@ -16,7 +16,6 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
   }
   final AlbumsRepo albumsRepo;
   List<Album> albumsList = [];
-
    _onFetchAlbums(FetchAlbums event, Emitter<AlbumsState> emit) async{
     emit(AlbumsLoading());
     try {
@@ -34,6 +33,11 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
         AlbumsListError(error: UnknownException('Unknown Error')),
       );
     }
+  }
+
+   @override
+  Future<void> close() {
+    return super.close();
   }
 }
 

@@ -1,6 +1,6 @@
+import 'package:bloc_example/utils/widget/states/loading_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 
 import '../bloc/albums/albums_bloc.dart';
 import '../model/album_list.dart';
@@ -16,13 +16,6 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   _loadAlbums() async {
     BlocProvider.of<AlbumsBloc>(context).add(FetchAlbums());
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAlbums();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,23 +32,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   _body() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        BlocBuilder<AlbumsBloc, AlbumsState>(
-          builder: (context, state) {
-            if (state is AlbumsListError) {
-              final error = state.error;
-              String message = '${error.message}\nTap to Retry.';
-              return Text(message);
-            }
-            if (state is AlbumsLoaded) {
-              List<Album> albums = state.albums;
-              return _list(albums);
-            }
-            //return const Center(child: CircularProgressIndicator());
-            return const Loading();
-          },
-        ),
-      ],
+      children: [_albumBloc()],
     );
   }
 
@@ -72,13 +49,27 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
       ),
     );
   }
-}
 
-class Loading extends StatelessWidget {
-  const Loading({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(child: SizedBox(child: Lottie.asset('assets/json/loading.json',fit: BoxFit.scaleDown)),);
+  Widget _albumBloc() {
+    return BlocBuilder<AlbumsBloc, AlbumsState>(
+      builder: (context, state) {
+        if (state is AlbumsListError) {
+          final error = state.error;
+          String message = '${error.message}\nTap to Retry.';
+          return Text(message);
+        }
+        if (state is AlbumsLoaded) {
+          List<Album> albums = state.albums;
+          return _list(albums);
+        }
+        if (state is AlbumsInitial) {
+          _loadAlbums();
+        }
+        //return const Center(child: CircularProgressIndicator());
+        return const LoadingState();
+      },
+    );
   }
 }
+
+
