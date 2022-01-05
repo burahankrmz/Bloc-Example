@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
 import '../../api/exceptions.dart';
 import '../../api/services.dart';
 import '../../model/album_list.dart';
-import 'package:equatable/equatable.dart';
 
 part 'albums_event.dart';
 part 'albums_state.dart';

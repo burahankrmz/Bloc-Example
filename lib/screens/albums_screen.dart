@@ -1,7 +1,9 @@
-import '../bloc/albums/albums_bloc.dart';
-import '../model/album_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+
+import '../bloc/albums/albums_bloc.dart';
+import '../model/album_list.dart';
 
 class AlbumsScreen extends StatefulWidget {
   const AlbumsScreen({Key? key}) : super(key: key);
@@ -36,6 +38,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 //? MAYBE ERROR
   _body() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         BlocBuilder<AlbumsBloc, AlbumsState>(
           builder: (context, state) {
@@ -48,7 +51,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
               List<Album> albums = state.albums;
               return _list(albums);
             }
-            return const CircularProgressIndicator();
+            //return const Center(child: CircularProgressIndicator());
+            return const Loading();
           },
         ),
       ],
@@ -67,5 +71,14 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
         },
       ),
     );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(child: SizedBox(child: Lottie.asset('assets/json/loading.json',fit: BoxFit.scaleDown)),);
   }
 }
